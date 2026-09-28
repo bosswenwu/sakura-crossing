@@ -9,6 +9,7 @@ import { createHud } from './core/hud.js';
 import { createMusic } from './core/audio.js';
 import { buildWorld } from './world/index.js';
 import { createEbike } from './world/ebike.js';
+import { createJourney } from './journey/experience.js';
 
 /* ------------------------------------------------------------------ *
  * Sakura Crossing -- entry point.
@@ -20,7 +21,10 @@ import { createEbike } from './world/ebike.js';
  * cast shadows crisp without shimmering.
  * ------------------------------------------------------------------ */
 
+async function startTown() {
 const canvas = document.getElementById('view');
+// Let the loading screen paint before the synchronous procedural world build.
+await new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 0)));
 
 const renderer = new THREE.WebGLRenderer({
   canvas,
@@ -116,6 +120,7 @@ canvas.addEventListener('click', () => {
 /* The one machine you can ride.  Built here rather than in `buildWorld`
  * because it is placed *after* the planet bake -- see the note in the file. */
 const ebike = createEbike({ scene, world, player, hud });
+const journey = createJourney({ player, hud });
 
 player.onInteract = (target) => {
   // on the machine, E is the way off it, whatever you happen to be looking at
@@ -245,6 +250,7 @@ function frame() {
   const hovered = !planetView && player.locked ? player.pick(world.interactables) : null;
   hud.setPrompt(hovered ? `E  ·  ${hovered.label.replace(/^.*?·\s*/, '')}` : '');
   hud.update(dt, player.locked);
+  journey.update(dt);
   // flat authoring coordinates, so what the readout says is what the code uses
   hud.setCoords(player.pos, player.yaw, player.pitch, dt);
 
@@ -252,6 +258,7 @@ function frame() {
   requestAnimationFrame(frame);
 }
 frame();
+document.getElementById('town-loading')?.remove();
 
 // expose a little for tuning from the console
 window.__scene = { scene, camera, renderer, pipeline, world, player, ebike, music, hud, sun, fill, bounce, hemi, THREE };
@@ -328,3 +335,9 @@ if (import.meta.env?.DEV) {
     return r.json();
   };
 }
+}
+startTown().catch(error => {
+  console.error(error);
+  const message = document.querySelector('#town-loading p');
+  if (message) message.textContent = '小镇未能加载。请刷新页面，并确认浏览器已开启硬件加速。';
+});

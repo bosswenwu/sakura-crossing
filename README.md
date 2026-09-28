@@ -1,3 +1,12 @@
+# 樱川漫游
+
+此开发分支将原来的自由漫游场景扩展为带中文旅行手册、三条散步路线、地点导航与持久化到访进度的探索体验。
+
+运行：`npm ci` 后执行 `npm run play`，打开 http://127.0.0.1:5179/ 。详细使用说明与验证命令见 [樱川漫游文档](docs/SAKURAGAWA.md)。
+
+下面保留原场景的说明与技术文档。三维场景来自 Kenton-GMI/sakura-crossing，沿用 MIT 许可。
+
+---
 # Sakura Crossing — 桜踏切
 
 An explorable Japanese suburban neighbourhood in blossom season, built as a real
