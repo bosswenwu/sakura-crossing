@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sakura Crossing — 桜踏切</title>
+<title>樱川漫游 · 去小镇，把时间走慢</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   html, body {
@@ -455,6 +455,12 @@
 </style>
 </head>
 <body>
+  <div id="town-loading" role="status" style="position:fixed;inset:0;z-index:100;display:grid;place-content:center;text-align:center;background:#edf3f9;color:#303956;font-family:'Microsoft YaHei',sans-serif">
+    <span style="font-size:48px;color:#a94f78" aria-hidden="true">✿</span>
+    <h1 style="font-family:SimSun,serif;font-size:28px;font-weight:400">樱川漫游</h1>
+    <p style="font-size:12px;color:#697891">正在准备小镇，第一次进入需要稍等片刻…</p>
+    <noscript>请开启浏览器 JavaScript 后重新打开。</noscript>
+  </div>
   <canvas id="view"></canvas>
   <script type="module" src="./src/main.js"></script>
 </body>

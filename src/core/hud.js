@@ -4,6 +4,8 @@
  * the point.
  * ------------------------------------------------------------------ */
 
+import { HOME } from '../journey/home.js';
+
 export function createHud({ volume = 0.34 } = {}) {
   const el = (tag, cls, parent, html) => {
     const n = document.createElement(tag);
@@ -19,11 +21,7 @@ export function createHud({ volume = 0.34 } = {}) {
   const prompt = el('div', 'prompt', root, '');
   const toast = el('div', 'toast', root, '');
   const hint = el('div', 'hint', root,
-    `<b>WASD</b> walk &nbsp;·&nbsp; <b>Shift</b> run &nbsp;·&nbsp; <b>Mouse</b> look
-     &nbsp;·&nbsp; <b>E</b> interact &nbsp;·&nbsp; <b>V</b> e-bike
-     &nbsp;·&nbsp; <b>P</b> see the planet &nbsp;·&nbsp; <b>M</b> music
-     &nbsp;·&nbsp; <b>C</b> coordinates &nbsp;·&nbsp; <b>R</b> opening view
-     &nbsp;·&nbsp; <b>Esc</b> release`);
+    `<b>WASD</b> 移动 · <b>鼠标</b> 转向 · <b>E</b> 互动 · <b>V</b> 电动车 · <b>Tab</b> 地图 · <b>Esc</b> 暂停`);
 
   /* Coordinate readout, off by default and toggled with C.
    *
@@ -37,64 +35,7 @@ export function createHud({ volume = 0.34 } = {}) {
 
   const overlay = el('div', 'overlay', root);
   overlay.dataset.mode = 'start';
-  overlay.innerHTML = `
-    <section class="menu-panel" role="dialog" aria-labelledby="menu-title">
-      <div class="menu-art" aria-hidden="true">
-        <div class="art-index">Nihonmachi · 05:42 PM</div>
-        <div class="art-kanji">春の日本街</div>
-        <div class="crossing-mark">
-          <i class="bar"></i><i class="bar"></i>
-          <span class="signal"><i></i><i></i></span>
-        </div>
-        <div class="art-caption">
-          <span>Walk slowly</span>
-          <strong>桜の季節</strong>
-        </div>
-      </div>
-      <div class="menu-copy">
-        <div class="menu-kicker">
-          <span class="start-only">A quiet spring walk</span>
-          <span class="pause-only">Intermission · Paused</span>
-        </div>
-        <h1 id="menu-title">Sakura <span>Crossing</span></h1>
-        <div class="menu-jp">桜踏切 <small>SAKURA CROSSING</small></div>
-        <p class="menu-description start-only">
-          沿着樱花盛开的日本街慢慢散步。穿过铁道、商店街与河岸，
-          看一座三渲二小镇在黄昏里醒来。
-        </p>
-        <p class="menu-description pause-only">
-          The scene is waiting where you left it. Adjust the music volume,
-          then continue your walk when you're ready.
-        </p>
-        <div class="control-strip">
-          <span><b>WASD</b> Move</span>
-          <span><b>Mouse</b> Look</span>
-          <span><b>E</b> Interact</span>
-          <span><b>Shift</b> Run</span>
-          <span><b>V</b> E-Bike</span>
-          <span><b>M</b> Music</span>
-          <span><b>C</b> Coordinates</span>
-        </div>
-        <label class="audio-control pause-only pause-stack">
-          <span class="audio-head">
-            <span>Background Music</span>
-            <output for="music-volume">34%</output>
-          </span>
-          <input id="music-volume" class="volume-slider" type="range"
-            min="0" max="100" step="1" value="34" aria-label="Background music volume" />
-        </label>
-        <button class="menu-action" type="button">
-          <span class="start-only">进入日本街</span>
-          <span class="pause-only">Resume Walk</span>
-          <i aria-hidden="true">→</i>
-        </button>
-        <div class="menu-foot">
-          <span>3D scene · 2D animation spirit</span>
-          <span class="start-only">CLICK TO BEGIN</span>
-          <span class="pause-only">ESC TO PAUSE</span>
-        </div>
-      </div>
-    </section>`;
+  overlay.innerHTML = HOME;
 
   const actionButton = overlay.querySelector('.menu-action');
   const audioControl = overlay.querySelector('.audio-control');
@@ -250,7 +191,7 @@ export function createHud({ volume = 0.34 } = {}) {
     api.onStart?.();
   });
   overlay.addEventListener('click', (e) => {
-    if (e.target.closest('.audio-control')) return;
+    if (e.target.closest('.audio-control, button, a, .route-ticket')) return;
     api.onStart?.();
   });
   for (const event of ['click', 'pointerdown', 'pointerup']) {
